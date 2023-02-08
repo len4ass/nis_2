@@ -1,4 +1,4 @@
-local PrintGraphDebugInfo = function()
+local Visual = function()
 	OutLine(GetOpsMoves() .. "\t\t" .. CalcParamsTiers(2) .. "\t\t" ..  CalcParamsTiers(6) .. "\t\t" .. CalcParamsTiers(8))
 end
 
@@ -42,7 +42,7 @@ local Bulldoze = function(average)
 			-- Перемещаем оператор на подходящий ярус (если таковой нашелся) и выводим информацию о текущем перемещении
 			if best_tier ~= tier then
 				MoveOpTierToTier(operator, best_tier)
-				PrintGraphDebugInfo()
+				Visual()
 				moving_tier = moving_tier + 1
 			end
 		end
@@ -59,19 +59,30 @@ local MainFunction = function()
 	CreateTiersByEdges("korr_20.gv")
 	DrawDiagrTiers()
 	
+	OutLine("=====")
+	OutLine("До: ")
+	PutTiersToTextFrame()
+	PutParamsTiers()
+
 	average_operator_count = GetAverageOperatorCount()
-	OutLine("Среднее количество операторов: " .. average_operator_count)
+	OutLine("Среднее арифметическое ширин ярусов: " .. average_operator_count)
 	
-	OutLine("# Перемещения\tШирина\t\tCV\t\tIC")
-    PrintGraphDebugInfo()
+	OutLine("# Перемещения\tШирина\t\tCV\t\tICL")
+    Visual()
 	Bulldoze(average_operator_count)
 	
 	OutLine("Всего перемещений: " .. GetOpsMoves())
+
+	OutLine("=====")
+	OutLine("После: ")
 	PutTiersToTextFrame()
 	PutParamsTiers()
 	
 	ClearDiagrArea() 
 	DrawDiagrTiers()
+
+	-- Оповещаем о конце работы))
+	SoundPlay("pig.wav")
 end
 
 MainFunction()
